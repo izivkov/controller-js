@@ -1,3 +1,5 @@
+# controller-js
+
 # How it's built
 
 * /client is the browser application
@@ -5,6 +7,7 @@
 
 ```bash
 > npm run prestart
+> npm install
 > npm run start
 ```
-# controller-js
+

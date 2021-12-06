@@ -7,14 +7,14 @@ const LocalKeyboard = require("./local-keyboard.js")
 const RemoteKeyboard = require("./remote-keyboard.js")
 
 const botConnection = new BotConnection()
-const commands = new Commands(botConnection)
+const browserConnection = new BrowserConnection()
+
+const commands = new Commands(botConnection, browserConnection)
 const remoteKeyboard = new RemoteKeyboard(commands.getCommandHandler())
 remoteKeyboard.start()
 
-const browserConnection = new BrowserConnection()
 
 browserConnection.start(data => {
-  // console.log (`Got data from browser ${data}`)
   const dataJson = JSON.parse (data)
 
   switch (Object.keys(dataJson)[0]) {

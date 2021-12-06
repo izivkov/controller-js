@@ -13,8 +13,7 @@ export class Connection {
     }
 
     async connectToServer() {
-        // const ws = new WebSocket('ws://localhost:7071/ws');
-        const ws = new WebSocket('ws://0.0.0.0:7071/ws');
+        const ws = new WebSocket(`ws://${window.location.hostname}:7071/ws`);
         return new Promise((resolve, reject) => {
             const timer = setInterval(() => {
                 if (ws.readyState === 1) {

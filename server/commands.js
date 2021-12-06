@@ -9,8 +9,9 @@
 
 class Commands {
 
-    constructor(botConnection) {
+    constructor(botConnection, browserConnection) {
         this.botConnection = botConnection
+        this.browserConnection = browserConnection
         this.handleStatus = this.handleStatus.bind(this);
         this.getCommandHandler = this.getCommandHandler.bind(this);
 
@@ -22,27 +23,8 @@ class Commands {
     }
 
     handleStatus(status /*Json*/) {
-        const value = status.status
-        const key = Object.keys(value)[0]
-
-        // TODO: handle the rest of status types here.
-        switch (key) {
-            case 'VIDEO_SERVER_URL':
-                console.log(`VIDEO_SERVER_URL`)
-                break;
-            case 'VIDEO_COMMAND':
-                console.log(`VIDEO_COMMAND`)
-                break;
-            case 'VIDEO_PROTOCOL':
-                console.log(`VIDEO_PROTOCOL`)
-                break;
-            case 'WEB_RTC_EVENT':
-                console.log(`WEB_RTC_EVENT`)
-                break;
-            default:
-                console.log(`Got status type [${key}]... handle later if needed`)
-                break;
-        }
+        // forward status and WebRTC negotition to browser
+        this.browserConnection.send(JSON.stringify(status))
     }
 }
 

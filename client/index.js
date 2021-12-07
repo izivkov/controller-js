@@ -1,3 +1,12 @@
+/*
+ * Developed for the OpenBot project (https://openbot.org) by:
+ *
+ * Ivo Zivkov
+ * izivkov@gmail.com
+ *
+ * Date: Mon Nov 29 2021
+ */
+
 import { Connection } from './connection.js'
 import { Keyboard } from './keyboard.js'
 

@@ -120,6 +120,7 @@ class RemoteKeyboard {
                         this.commandHandler.sendCommand('DRIVE_MODE')
                         break;
                     case 'Escape':
+                        this.commandHandler.reset()
                         break;
                 }
         }

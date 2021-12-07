@@ -11,113 +11,92 @@ export class Keyboard {
 
     constructor() {
 
+        const menuTable = [
+            { keypressCode: 'w', key: 'W', description: 'Go forward' },
+            { keypressCode: 's', key: 'S', description: 'Go backward' },
+            { keypressCode: 'a', key: 'A', description: 'Turn slightly left (while driving)' },
+            { keypressCode: 'd', key: 'D', description: 'Turn slightly right (while driving)' },
+            { keypressCode: 'q', key: 'Q', description: 'Rotate left' },
+            { keypressCode: 'e', key: 'E', description: 'Rotate right' },
+            { keypressCode: 'm', key: 'M', description: 'Drive mode' },
+            { keypressCode: 'n', key: 'N', description: 'Toggle noise' },
+            { keypressCode: 'ArrowLeft', key: 'Left', description: 'Left indicator' },
+            { keypressCode: 'ArrowRight', key: 'Right', description: 'Right indicator' },
+            { keypressCode: 'ArrowUp', key: 'Up', description: 'Cancel indicators' },
+            { keypressCode: 'ArrowDown', key: 'Down', description: 'Network mode' },
+            { keypressCode: ' ', key: 'SPACE', description: 'Toggle logging' },
+            { keypressCode: 'Escape', key: 'ESC', description: 'Quit' },
+        ]
+
+        // build a set of the keypress codes for a quick lookup
+        const keypressSet = new Set(menuTable.map (item => item.keypressCode))
+
+        // currently pressed keys
         const pressedKeys = new Set()
 
         this.start = (onKeyPress) => {
-            processKeys(onKeyPress, createKeyMenu())
+            const listItems = createMenuList();
+
+            // append all 'li' elements to the root element
+            const rootElement = document.getElementById('command-list')
+            listItems.forEach (liItem => rootElement.appendChild(liItem))
+
+            processKeys(onKeyPress, listItems)            
         }
 
-        const createKeyMenu = () => {
-            const listItems = createCommandList(getKeyboardMenu())
-            listItems.forEach(li => document.getElementById('command-list').appendChild(li))
+        // create HTML "li" elements from 'menuTable'
+        const createMenuList = () => {
+            const listItems = menuTable.map(item => {
+                const liItem = document.createElement('li');
+                liItem.appendChild(document.createTextNode(`${item.key}: ${item.description}`));
+                liItem.setAttribute("key", item.key)
+                liItem.setAttribute("keypressCode", item.keypressCode)
+
+                return liItem
+            })
             return listItems
         }
-        
+
         const highlightPressedKeys = (list) => {
             list.forEach(liItem => {
-                const itemKey = liItem.getAttribute('key')
-                const keypressName = itemListToKeyMap[itemKey]
-        
+                const keypressName = liItem.getAttribute('keypressCode')
+
                 liItem.setAttribute("style",
-                    pressedKeys.has (keypressName) ? "font-weight: bold" : "font-weight: normal");
+                    pressedKeys.has(keypressName) ? "font-weight: bold" : "font-weight: normal");
             })
         }
 
-        const getKeyboardMenu = () => {
-            return [
-                { key: 'W', description: 'Go forward' },
-                { key: 'S', description: 'Go backward' },
-                { key: 'A', description: 'Turn slightly left (while driving)' },
-                { key: 'D', description: 'Turn slightly right (while driving)' },
-                { key: 'Q', description: 'Rotate left' },
-                { key: 'E', description: 'Rotate right' },
-                { key: 'M', description: 'Drive mode' },
-                { key: 'N', description: 'Toggle noise' },
-                { key: 'Left', description: 'Left indicator' },
-                { key: 'Right', description: 'Right indicator' },
-                { key: 'Up', description: 'Cancel indicators' },
-                { key: 'Down', description: 'Network mode' },
-                { key: 'SPACE', description: 'Toggle logging' },
-                { key: 'ESC', description: 'Quit' },
-            ]
-        }
-    
-        const isValid = key => valueSet.has(key)        
+        const isValid = key => keypressSet.has(key)
 
         const processKeys = (onKeypress, keyList) => {
             document.addEventListener('keydown', (event) => {
 
-                if (!isValid (event.key)) {
+                if (!isValid(event.key)) {
                     return
                 }
 
                 // keep track of pressed key
                 pressedKeys.add(event.key)
-    
-                const {altKey, code, ctrlKey, key, shiftKey, type} = event
-                const keyPerss = {altKey: altKey, code: code, ctrlKey: ctrlKey, key:key, shiftKey:shiftKey, type:type}
-                onKeypress(keyPerss)
-
                 highlightPressedKeys(keyList)
+
+                const { altKey, code, ctrlKey, key, shiftKey, type } = event
+                const keyPerss = { altKey: altKey, code: code, ctrlKey: ctrlKey, key: key, shiftKey: shiftKey, type: type }
+                onKeypress(keyPerss)
             }, false);
-    
-              document.addEventListener('keyup', (event) => {
-                if (!isValid (event.key)) {
+
+            document.addEventListener('keyup', (event) => {
+                if (!isValid(event.key)) {
                     return
                 }
-                
-                pressedKeys.delete(event.key)
-    
-                const {altKey, code, ctrlKey, key, shiftKey, type} = event
-                const keyPerss = {altKey: altKey, code: code, ctrlKey: ctrlKey, key:key, shiftKey:shiftKey, type:type}
-                onKeypress(keyPerss)
 
+                pressedKeys.delete(event.key)
                 highlightPressedKeys(keyList)
+
+                const { altKey, code, ctrlKey, key, shiftKey, type } = event
+                const keyPerss = { altKey: altKey, code: code, ctrlKey: ctrlKey, key: key, shiftKey: shiftKey, type: type }
+                onKeypress(keyPerss)
             }, false);
 
         }
-    
-        const createCommandList = (commandArr) => {
-            return commandArr.map(command => {
-                const liItem = document.createElement('li');
-                liItem.appendChild(document.createTextNode(`${command.key}: ${command.description}`));
-                liItem.setAttribute("key", command.key)
-        
-                return liItem
-            })
-        }
-        
-        const itemListToKeyMap = {
-        
-            // listItemKey: prepressName
-        
-            "Right": "ArrowRight",
-            "Left": "ArrowLeft",
-            "Down": "ArrowDown",
-            "Up": "ArrowUp",
-            "SPACE": " ",
-            "ESC": "Escape",
-            "W": "w",
-            "S": "s",
-            "A": "a",
-            "D": "d",
-            "Q": "q",
-            "E": "e",
-            "M": "m",
-            "N": "n"
-        }
-        
-        // set of all keys
-        const valueSet = new Set (Object.values(itemListToKeyMap))        
     }
 }

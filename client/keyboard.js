@@ -14,16 +14,16 @@ export class Keyboard {
         const pressedKeys = new Set()
 
         this.start = (onKeyPress) => {
-            processKeys(onKeyPress)
+            processKeys(onKeyPress, createKeyMenu())
         }
 
-        this.createKeyMenu = () => {
+        const createKeyMenu = () => {
             const listItems = createCommandList(getKeyboardMenu())
             listItems.forEach(li => document.getElementById('command-list').appendChild(li))
             return listItems
         }
         
-        this.highlightPressedKeys = (list) => {
+        const highlightPressedKeys = (list) => {
             list.forEach(liItem => {
                 const itemKey = liItem.getAttribute('key')
                 const keypressName = itemListToKeyMap[itemKey]
@@ -52,24 +52,39 @@ export class Keyboard {
             ]
         }
     
-        const processKeys = (onKeypress) => {
+        const isValid = key => valueSet.has(key)        
 
+        const processKeys = (onKeypress, keyList) => {
             document.addEventListener('keydown', (event) => {
+
+                if (!isValid (event.key)) {
+                    return
+                }
+
                 // keep track of pressed key
                 pressedKeys.add(event.key)
     
                 const {altKey, code, ctrlKey, key, shiftKey, type} = event
                 const keyPerss = {altKey: altKey, code: code, ctrlKey: ctrlKey, key:key, shiftKey:shiftKey, type:type}
                 onKeypress(keyPerss)
-              }, false);
+
+                highlightPressedKeys(keyList)
+            }, false);
     
               document.addEventListener('keyup', (event) => {
+                if (!isValid (event.key)) {
+                    return
+                }
+                
                 pressedKeys.delete(event.key)
     
                 const {altKey, code, ctrlKey, key, shiftKey, type} = event
                 const keyPerss = {altKey: altKey, code: code, ctrlKey: ctrlKey, key:key, shiftKey:shiftKey, type:type}
                 onKeypress(keyPerss)
-              }, false);
+
+                highlightPressedKeys(keyList)
+            }, false);
+
         }
     
         const createCommandList = (commandArr) => {
@@ -103,8 +118,6 @@ export class Keyboard {
         }
         
         // set of all keys
-        const valueSet = new Set (Object.values(itemListToKeyMap))
-        
-        this.isValid = key => valueSet.has(key)        
+        const valueSet = new Set (Object.values(itemListToKeyMap))        
     }
 }

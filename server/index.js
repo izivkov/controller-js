@@ -27,4 +27,4 @@ new Dnssd().start(
   () => botConnection.start(commands.handleStatus), // onServiceUp
   botConnection.stop)  // onServiceDown
 
-new LocalKeyboard(commands.getCommandHandler()).start()
+// new LocalKeyboard(commands.getCommandHandler()).start()

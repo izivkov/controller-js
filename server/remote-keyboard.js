@@ -78,7 +78,7 @@ class RemoteKeyboard {
                             this.commandHandler.forwardLeft()
                         }
                         if (this.pressedKeys.has('s')) {
-                            this.commandHandler.backwordLeft()
+                            this.commandHandler.backwardLeft()
                         }
                         break
 
@@ -87,7 +87,7 @@ class RemoteKeyboard {
                             this.commandHandler.forwardRight()
                         }
                         if (this.pressedKeys.has('s')) {
-                            this.commandHandler.backwordRight()
+                            this.commandHandler.backwardRight()
                         }
                         break
 

@@ -5,7 +5,7 @@ const BrowserConnection = require("./browser-connection")
 const Commands = require("./commands.js")
 const LocalKeyboard = require("./local-keyboard.js")
 const RemoteKeyboard = require("./remote-keyboard.js")
-const CleanupService = require("./cleanup-service")
+const ShutdownService = require("./shutdown-service")
 
 const botConnection = new BotConnection()
 const browserConnection = new BrowserConnection()
@@ -13,10 +13,10 @@ const browserConnection = new BrowserConnection()
 const commands = new Commands(botConnection, browserConnection)
 const remoteKeyboard = new RemoteKeyboard(commands.getCommandHandler())
 
-
 const onQuit = () => {
-  botConnection.stop()
   browserConnection.stop()
+  // botConnection.stop() ???
+  // process.exit() ???
 }
 
 remoteKeyboard.start(onQuit)
@@ -30,7 +30,7 @@ browserConnection.start(data => {
       remoteKeyboard.processKey(dataJson['KEYPRESS'])
       break
 
-    // redirect all other data to bot
+    // redirect all other data to robot
     default:
       botConnection.send(data)
   }
@@ -41,7 +41,7 @@ new Dnssd().start(
   botConnection.stop)  // onServiceDown
 
 // handle exit gracefully
-new CleanupService (botConnection, browserConnection).start()
+new ShutdownService (botConnection, browserConnection).start()
 
 /* Uncoment this to run server in headless mode:
     cd server

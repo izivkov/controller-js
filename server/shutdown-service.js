@@ -7,7 +7,7 @@
  * Date: Sun Nov 28 2021
  */
 
-class CleanupService {
+class ShutdownService {
 
     constructor(botConnection, browserConnection) {
 
@@ -32,8 +32,9 @@ class CleanupService {
             //catches ctrl+c event
             process.on('SIGINT', exitHandler.bind(null, { exit: true }));
             process.on('SIGTERM', exitHandler.bind(null, { exit: true }));
+            process.on('SIGHUP', exitHandler.bind(null, { exit: true }));
 
-            // catches "kill pid" (for example: nodemon restart)
+            // catches "kill pid" (for example: nodemon restart) for dev
             //process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
             //process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
 
@@ -43,4 +44,4 @@ class CleanupService {
     }
 }
 
-module.exports = CleanupService;
+module.exports = ShutdownService;

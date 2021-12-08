@@ -7,6 +7,8 @@
  * Date: Mon Nov 29 2021
  */
 
+import { ErrorDisplay } from './error-display.js'
+
 export class Connection {
 
     constructor () {
@@ -27,10 +29,10 @@ export class Connection {
     async start (onData) {
         const ws = await this.connectToServer ()
         
-        ws.onmessage = (webSocketMessage) => {
-            onData(webSocketMessage.data)
-        };   
-
+        ws.onmessage = (webSocketMessage) => onData(webSocketMessage.data)
+        ws.onclose = () => new ErrorDisplay().set (`Disconnected from the server. Please restart your nodejs`)
+        ws.onopen = () => new ErrorDisplay().reset()
+    
         this.send = data => ws.send(data)
     }
 }

@@ -67,11 +67,9 @@ class RemoteKeyboard {
                     case 'w':
                         this.commandHandler.goForward()
                         break
-
                     case 's':
                         this.commandHandler.goBackward()
                         break
-
                     case 'a':
                         if (this.pressedKeys.has('w')) {
                             this.commandHandler.forwardLeft()
@@ -80,7 +78,6 @@ class RemoteKeyboard {
                             this.commandHandler.backwardLeft()
                         }
                         break
-
                     case 'd':
                         if (this.pressedKeys.has('w')) {
                             this.commandHandler.forwardRight()
@@ -89,11 +86,9 @@ class RemoteKeyboard {
                             this.commandHandler.backwardRight()
                         }
                         break
-
                     case 'q':
                         this.commandHandler.rotateLeft()
                         break
-
                     case 'e':
                         this.commandHandler.rotateRight()
                         break

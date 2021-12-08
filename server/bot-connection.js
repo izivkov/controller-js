@@ -43,7 +43,7 @@ class BotConnection {
             }
 
             const remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
-            console.log('Connected! 😃')
+            console.log('Connected to Bot! 😃')
             conn.on('data', onConnData);
             conn.once('close', onConnClose);
             conn.on('error', onConnError);

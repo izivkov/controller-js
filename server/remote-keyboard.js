@@ -17,7 +17,8 @@ class RemoteKeyboard {
         this.pressedKeys = new Set()
     }
 
-    start() {
+    start(onQuit) {
+        this.onQuit = onQuit
     }
 
     getKeyboardCommands() {
@@ -40,8 +41,6 @@ class RemoteKeyboard {
     }
 
     processKey(keyPress) {
-        console.log(`processKey: ${JSON.stringify(keyPress)}`)
-
         switch (keyPress.type) {
             case 'keyup':
                 // keep track of what keys are currently pressed
@@ -121,6 +120,7 @@ class RemoteKeyboard {
                         break;
                     case 'Escape':
                         this.commandHandler.reset()
+                        this.onQuit()
                         break;
                 }
         }

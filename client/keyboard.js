@@ -96,7 +96,6 @@ export class Keyboard {
                 const keyPerss = { altKey: altKey, code: code, ctrlKey: ctrlKey, key: key, shiftKey: shiftKey, type: type }
                 onKeypress(keyPerss)
             }, false);
-
         }
     }
 }

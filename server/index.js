@@ -11,15 +11,26 @@ const browserConnection = new BrowserConnection()
 
 const commands = new Commands(botConnection, browserConnection)
 const remoteKeyboard = new RemoteKeyboard(commands.getCommandHandler())
-remoteKeyboard.start()
 
+const onQuit = () => {
+  botConnection.stop()
+  browserConnection.stop()
+}
+
+remoteKeyboard.start(onQuit)
 
 browserConnection.start(data => {
-  const dataJson = JSON.parse (data)
+  const dataJson = JSON.parse(data)
 
   switch (Object.keys(dataJson)[0]) {
     case 'KEYPRESS':
       remoteKeyboard.processKey(dataJson['KEYPRESS'])
+      break
+
+    // redirect all other data to bot
+    default:
+      console.log (`Sending to bot: ${data}`)
+      botConnection.send(data)
   }
 })
 

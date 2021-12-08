@@ -24,7 +24,8 @@ class BrowserConnection {
                 onData(messageAsString)
             });
 
-            this.send = data => ws.send (data)
+            this.send = data => ws.send (data+'\n')
+            this.stop = () => wss.close()
         });
     }
 }

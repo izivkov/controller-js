@@ -52,14 +52,15 @@ class BotConnection {
         this.server.on('connection', handleConnection);
 
         this.server.listen(this.port, () => {
+            console.log (`listen on port ${this.port}`)
         });
     }
 
     send (message) {
         if (this.socket !== undefined && this.socket !== null) {
-            this.socket.write(message)
+            this.socket.write(message+'\n')
         } else {
-            // console.log (`Not connected, please connect to phone first...`)
+            console.log (`Not connected, please connect to phone first...`)
         }
     }
 

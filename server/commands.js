@@ -24,6 +24,7 @@ class Commands {
 
     handleStatus(status /*Json*/) {
         // forward status and WebRTC negotition to browser
+        // console.log(`handleStatus: forwarding ${JSON.stringify(status)} ro browser`)
         this.browserConnection.send(JSON.stringify(status))
     }
 }

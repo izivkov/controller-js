@@ -20,12 +20,16 @@ export class BotMessageHandler {
                 case 'VIDEO_PROTOCOL':
                     break
 
-                case 'START':
-                    webRtc.start()
-                    break
+                case 'VIDEO_COMMAND':
+                    switch (msg.VIDEO_COMMAND) {
+                        case 'START':
+                            webRtc.start()
+                            break
 
-                case 'STOP':
-                    webRtc.stop()
+                        case 'STOP':
+                            webRtc.stop()
+                            break
+                    }
                     break
 
                 case 'WEB_RTC_EVENT':

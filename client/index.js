@@ -17,7 +17,7 @@ import { BotMessageHandler } from './bot-message-handler'
     const botMessageHandler = new BotMessageHandler (connection)
 
     const onData = data => {
-        //console.log(`Got data from server [${data}]`)
+        console.log(`Got data from server [${data}]`)
         botMessageHandler.handle(JSON.parse(data).status, connection)
     }
 

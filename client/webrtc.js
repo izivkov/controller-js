@@ -10,39 +10,31 @@
 export class WebRTC {
 
     constructor(connection) {
+        const { RTCPeerConnection } = window;
+
         this.connection = connection
-
-        const { RTCPeerConnection, RTCSessionDescription, RTCIceCandidate } = window;
-
-        const peerConnection = new RTCPeerConnection()
-        const remoteStream = new MediaStream()
-        document.querySelector('#video').srcObject = remoteStream
-
-        peerConnection.addEventListener('track', event => {
-            console.log('Got remote track:', event.streams[0]);
-            event.streams[0].getTracks().forEach(track => {
-                console.log('Add a track to the remoteStream:', track);
-                remoteStream.addTrack(track);
-            });
-        });
-
+        let peerConnection = null
 
         this.handle = (data) => {
+            console.log(`WebRTC: handle...`)
+
+            const { RTCSessionDescription, RTCIceCandidate } = window;
+
             const webRtcEvent = JSON.parse(data)
             console.log(`WebRTC: type: ${webRtcEvent.type}`)
 
             switch (webRtcEvent.type) {
                 case "offer":
-                    peerConnection.setRemoteDescription(new RTCSessionDescription({sdp: webRtcEvent.sdp, type:'offer'}))
+                    peerConnection.setRemoteDescription(new RTCSessionDescription({ sdp: webRtcEvent.sdp, type: 'offer' }))
                     doAnswer()
                     break
 
                 case "candidate":
                     const candidate = new RTCIceCandidate({
-                            candidate: webRtcEvent.candidate,
-                            sdpMid: webRtcEvent.id,
-                            sdpMLineIndex: webRtcEvent.label
-                        })
+                        candidate: webRtcEvent.candidate,
+                        sdpMid: webRtcEvent.id,
+                        sdpMLineIndex: webRtcEvent.label
+                    })
 
                     peerConnection.addIceCandidate(candidate)
                     break
@@ -56,15 +48,30 @@ export class WebRTC {
 
         const doAnswer = async () => {
             const answer = await peerConnection.createAnswer();
-            await peerConnection.setLocalDescription(answer);   
-            this.connection.send(JSON.stringify({webrtc_event: answer}))
+            await peerConnection.setLocalDescription(answer);
+            this.connection.send(JSON.stringify({ webrtc_event: answer }))
         }
 
-        this.start = () => { 
-            console.log (`WebRTC: start...`)
+        this.start = () => {
+            console.log(`WebRTC: start...`)
+
+            peerConnection = new RTCPeerConnection()
+            const remoteStream = new MediaStream()
+            document.querySelector('#video').srcObject = remoteStream
+
+            peerConnection.addEventListener('track', event => {
+                console.log('Got remote track:', event.streams[0]);
+                event.streams[0].getTracks().forEach(track => {
+                    console.log('Add a track to the remoteStream:', track);
+                    remoteStream.addTrack(track);
+                });
+            });
         }
+
         this.stop = () => {
-            console.log (`WebRTC: stop...`)
-         }
+            console.log(`WebRTC: stop...`)
+            peerConnection.close()
+            peerConnection = null
+        }
     }
 }

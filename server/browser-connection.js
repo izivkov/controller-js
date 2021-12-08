@@ -25,7 +25,11 @@ class BrowserConnection {
             });
 
             this.send = data => ws.send (data+'\n')
-            this.stop = () => wss.close()
+            
+            this.stop = () => {
+                console.log ("Closing BrowserConnection ...")
+                wss.close()
+            }
         });
     }
 }

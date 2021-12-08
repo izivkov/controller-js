@@ -5,12 +5,14 @@ const BrowserConnection = require("./browser-connection")
 const Commands = require("./commands.js")
 const LocalKeyboard = require("./local-keyboard.js")
 const RemoteKeyboard = require("./remote-keyboard.js")
+const CleanupService = require("./cleanup-service")
 
 const botConnection = new BotConnection()
 const browserConnection = new BrowserConnection()
 
 const commands = new Commands(botConnection, browserConnection)
 const remoteKeyboard = new RemoteKeyboard(commands.getCommandHandler())
+
 
 const onQuit = () => {
   botConnection.stop()
@@ -20,6 +22,7 @@ const onQuit = () => {
 remoteKeyboard.start(onQuit)
 
 browserConnection.start(data => {
+  // incoming data/commands from browser
   const dataJson = JSON.parse(data)
 
   switch (Object.keys(dataJson)[0]) {
@@ -29,7 +32,6 @@ browserConnection.start(data => {
 
     // redirect all other data to bot
     default:
-      console.log (`Sending to bot: ${data}`)
       botConnection.send(data)
   }
 })
@@ -38,4 +40,10 @@ new Dnssd().start(
   () => botConnection.start(commands.handleStatus), // onServiceUp
   botConnection.stop)  // onServiceDown
 
+// handle exit gracefully
+new CleanupService (botConnection, browserConnection).start()
+
+/* Uncoment this to run server in headless mode:
+    cd server
+    npm start */
 // new LocalKeyboard(commands.getCommandHandler()).start()

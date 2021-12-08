@@ -65,6 +65,7 @@ class BotConnection {
     }
 
     stop() {
+        console.log ("Closing BotConnection ...")
         this.server.close()
     }
 }

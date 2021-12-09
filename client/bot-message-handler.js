@@ -12,54 +12,50 @@ import { ErrorDisplay } from './error-display.js'
 import { Buttons } from './buttons.js'
 
 export class BotMessageHandler {
+  constructor (connection) {
+    const webRtc = new WebRTC(connection)
 
-    constructor(connection) {
-        const webRtc = new WebRTC(connection)
+    this.handle = (msg) => {
+      const msgType = Object.keys(msg)[0]
+      switch (msgType) {
+        case 'VIDEO_PROTOCOL':
+          if (msg.VIDEO_PROTOCOL !== 'WEBRTC') {
+            ErrorDisplay.set('Only WebRTC video supported. Please set your andoid app for WebRTC')
+          } else {
+            ErrorDisplay.reset()
+          }
+          break
 
-        this.handle = (msg) => {
+        case 'VIDEO_COMMAND':
+          switch (msg.VIDEO_COMMAND) {
+            case 'START':
+              webRtc.start()
+              break
 
-            const msgType = Object.keys(msg)[0]
-            switch (msgType) {
-                case 'VIDEO_PROTOCOL':
-                    if (msg.VIDEO_PROTOCOL !== 'WEBRTC') {
-                        ErrorDisplay.set("Only WebRTC video supported. Please set your andoid app for WebRTC")
-                    } else {
-                        ErrorDisplay.reset()
-                    }
-                    break
+            case 'STOP':
+              webRtc.stop()
+              break
+          }
+          break
 
-                case 'VIDEO_COMMAND':
-                    switch (msg.VIDEO_COMMAND) {
-                        case 'START':
-                            webRtc.start()
-                            break
+        case 'TOGGLE_MIRROR':
+          Buttons.toggleMirror(msg.TOGGLE_MIRROR === 'true')
+          break
 
-                        case 'STOP':
-                            webRtc.stop()
-                            break
-                    }
-                    break
+        case 'TOGGLE_SOUND':
+          Buttons.toggleSound(msg.TOGGLE_SOUND === 'true')
+          break
 
-                case 'TOGGLE_MIRROR':
-                    Buttons.toggleMirror (msg.TOGGLE_MIRROR === 'true')
-                    break
+        case 'WEB_RTC_EVENT':
+          webRtc.handle(msg.WEB_RTC_EVENT, connection)
+          break
 
-                case 'TOGGLE_SOUND':
-                    Buttons.toggleSound (msg.TOGGLE_SOUND === 'true')
-                    break
-
-                case 'WEB_RTC_EVENT':
-                    const webrtcEvent = msg.WEB_RTC_EVENT
-                    webRtc.handle(webrtcEvent, connection)
-                    break
-
-                default:
-                    // process other status information here
-                    // This can be used ti enhance the UI, for example
-                    // do display a blinking sigan indicator, etc
-                    break
-            }
-
-        }
+        default:
+          // process other status information here
+          // This can be used ti enhance the UI, for example
+          // do display a blinking sigan indicator, etc
+          break
+      }
     }
+  }
 }

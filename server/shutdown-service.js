@@ -8,41 +8,39 @@
  */
 
 class ShutdownService {
+  constructor (botConnection, browserConnection) {
+    this.start = () => {
+      console.log('ShutdownService started...')
+      process.stdin.resume() // so the program will not close instantly
 
-    constructor(botConnection, browserConnection) {
-
-        this.start = () => {
-            console.log (`ShutdownService started...`)
-            process.stdin.resume(); //so the program will not close instantly
-
-            const exitHandler = (options, exitCode) => {
-                if (botConnection && botConnection.stop) {
-                    botConnection.stop()
-                }
-
-                if (browserConnection && browserConnection.stop) {
-                    browserConnection.stop()
-                }
-
-                if (options.exit) process.exit();
-            }
-
-            //do something when app is closing
-            process.on('exit', exitHandler.bind(null, { cleanup: true }));
-
-            //catches ctrl+c event
-            process.on('SIGINT', exitHandler.bind(null, { exit: true }));
-            process.on('SIGTERM', exitHandler.bind(null, { exit: true }));
-            process.on('SIGHUP', exitHandler.bind(null, { exit: true }));
-
-            // catches "kill pid" (for example: nodemon restart) for dev
-            //process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
-            //process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
-
-            //catches uncaught exceptions
-            process.on('uncaughtException', exitHandler.bind(null, { exit: true }));
+      const exitHandler = (options, exitCode) => {
+        if (botConnection && botConnection.stop) {
+          botConnection.stop()
         }
+
+        if (browserConnection && browserConnection.stop) {
+          browserConnection.stop()
+        }
+
+        if (options.exit) process.exit()
+      }
+
+      // do something when app is closing
+      process.on('exit', exitHandler.bind(null, { cleanup: true }))
+
+      // catches ctrl+c event
+      process.on('SIGINT', exitHandler.bind(null, { exit: true }))
+      process.on('SIGTERM', exitHandler.bind(null, { exit: true }))
+      process.on('SIGHUP', exitHandler.bind(null, { exit: true }))
+
+      // catches "kill pid" (for example: nodemon restart) for dev
+      // process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
+      // process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
+
+      // catches uncaught exceptions
+      process.on('uncaughtException', exitHandler.bind(null, { exit: true }))
     }
+  }
 }
 
-module.exports = ShutdownService;
+module.exports = ShutdownService

@@ -8,15 +8,14 @@
  */
 
 export class ErrorDisplay {
+  constructor () {
+    ErrorDisplay.reset()
+  }
 
-    constructor () {
-        reset()
-    }
+  static set = (text) => {
+    const error = document.getElementById('error-message')
+    error.textContent = text
+  }
 
-    static set = (text) => {
-        const error = document.getElementById ('error-message')
-        error.textContent = text
-    }
-
-    static reset = () => this.set ('')
+  static reset = () => this.set('')
 }

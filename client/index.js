@@ -13,25 +13,24 @@ import { BotMessageHandler } from './bot-message-handler'
 import { Buttons } from './buttons'
 
 (async () => {
-    const connection = new Connection()
-    const keyboard = new Keyboard()
-    const botMessageHandler = new BotMessageHandler(connection)
+  const connection = new Connection()
+  const keyboard = new Keyboard()
+  const botMessageHandler = new BotMessageHandler(connection)
 
-    const onData = data => {
-        // console.log(`Got data from server [${data}]`)
-        botMessageHandler.handle(JSON.parse(data).status, connection)
-    }
+  const onData = data => {
+    // console.log(`Got data from server [${data}]`)
+    botMessageHandler.handle(JSON.parse(data).status, connection)
+  }
 
-    await connection.start(onData)
+  await connection.start(onData)
 
-    const onKeyPress = (key) => {
-        // Send keypress to server
-        connection.send(JSON.stringify({ KEYPRESS: key }))
-    }
+  const onKeyPress = (key) => {
+    // Send keypress to server
+    connection.send(JSON.stringify({ KEYPRESS: key }))
+  }
 
-    new Buttons (connection)
+  // eslint-disable-next-line no-new
+  new Buttons(connection)
 
-    keyboard.start(onKeyPress)    
+  keyboard.start(onKeyPress)
 })()
-
-

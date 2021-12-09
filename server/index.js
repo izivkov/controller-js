@@ -1,11 +1,11 @@
 const Dnssd = require('./dns.js')
 
-const BotConnection = require("./bot-connection.js")
-const BrowserConnection = require("./browser-connection")
-const Commands = require("./commands.js")
-const LocalKeyboard = require("./local-keyboard.js")
-const RemoteKeyboard = require("./remote-keyboard.js")
-const ShutdownService = require("./shutdown-service")
+const BotConnection = require('./bot-connection.js')
+const BrowserConnection = require('./browser-connection')
+const { Commands } = require('./commands.js')
+// const LocalKeyboard = require('./local-keyboard.js')
+const RemoteKeyboard = require('./remote-keyboard.js')
+const ShutdownService = require('./shutdown-service')
 
 const botConnection = new BotConnection()
 const browserConnection = new BrowserConnection()
@@ -15,8 +15,6 @@ const remoteKeyboard = new RemoteKeyboard(commands.getCommandHandler())
 
 const onQuit = () => {
   browserConnection.stop()
-  // botConnection.stop() ???
-  // process.exit() ???
 }
 
 remoteKeyboard.start(onQuit)
@@ -27,7 +25,7 @@ browserConnection.start(data => {
 
   switch (Object.keys(dataJson)[0]) {
     case 'KEYPRESS':
-      remoteKeyboard.processKey(dataJson['KEYPRESS'])
+      remoteKeyboard.processKey(dataJson.KEYPRESS)
       break
 
     // redirect all other data to robot
@@ -38,10 +36,10 @@ browserConnection.start(data => {
 
 new Dnssd().start(
   () => botConnection.start(commands.handleStatus), // onServiceUp
-  botConnection.stop)  // onServiceDown
+  botConnection.stop) // onServiceDown
 
 // handle exit gracefully
-new ShutdownService (botConnection, browserConnection).start()
+new ShutdownService(botConnection, browserConnection).start()
 
 /* Uncoment this to run server in headless mode:
     cd server

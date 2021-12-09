@@ -10,14 +10,15 @@
 import { Connection } from './connection.js'
 import { Keyboard } from './keyboard.js'
 import { BotMessageHandler } from './bot-message-handler'
+import { Buttons } from './buttons'
 
 (async () => {
     const connection = new Connection()
     const keyboard = new Keyboard()
-    const botMessageHandler = new BotMessageHandler (connection)
+    const botMessageHandler = new BotMessageHandler(connection)
 
     const onData = data => {
-        console.log(`Got data from server [${data}]`)
+        // console.log(`Got data from server [${data}]`)
         botMessageHandler.handle(JSON.parse(data).status, connection)
     }
 
@@ -28,7 +29,9 @@ import { BotMessageHandler } from './bot-message-handler'
         connection.send(JSON.stringify({ KEYPRESS: key }))
     }
 
-    keyboard.start(onKeyPress)
+    new Buttons (connection)
+
+    keyboard.start(onKeyPress)    
 })()
 
 

@@ -9,12 +9,12 @@
 
 import { WebRTC } from './webrtc.js'
 import { ErrorDisplay } from './error-display.js'
+import { Buttons } from './buttons.js'
 
 export class BotMessageHandler {
 
     constructor(connection) {
         const webRtc = new WebRTC(connection)
-        const errorDisplay = new ErrorDisplay()
 
         this.handle = (msg) => {
 
@@ -22,9 +22,9 @@ export class BotMessageHandler {
             switch (msgType) {
                 case 'VIDEO_PROTOCOL':
                     if (msg.VIDEO_PROTOCOL !== 'WEBRTC') {
-                        errorDisplay.set("Only WebRTC video supported. Please set your andoid app for WebRTC")
+                        ErrorDisplay.set("Only WebRTC video supported. Please set your andoid app for WebRTC")
                     } else {
-                        errorDisplay.reset ()
+                        ErrorDisplay.reset()
                     }
                     break
 
@@ -38,6 +38,14 @@ export class BotMessageHandler {
                             webRtc.stop()
                             break
                     }
+                    break
+
+                case 'TOGGLE_MIRROR':
+                    Buttons.toggleMirror (msg.TOGGLE_MIRROR === 'true')
+                    break
+
+                case 'TOGGLE_SOUND':
+                    Buttons.toggleSound (msg.TOGGLE_SOUND === 'true')
                     break
 
                 case 'WEB_RTC_EVENT':

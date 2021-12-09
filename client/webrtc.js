@@ -12,16 +12,16 @@ export class WebRTC {
     constructor(connection) {
         const { RTCPeerConnection } = window;
 
-        this.connection = connection
         let peerConnection = null
 
         this.handle = (data) => {
-            console.log(`WebRTC: handle...`)
+            if (!peerConnection) {
+                console.log("WebRTC: start() not called, cannot handle...")
+                return
+            }
 
             const { RTCSessionDescription, RTCIceCandidate } = window;
-
             const webRtcEvent = JSON.parse(data)
-            console.log(`WebRTC: type: ${webRtcEvent.type}`)
 
             switch (webRtcEvent.type) {
                 case "offer":
@@ -49,23 +49,21 @@ export class WebRTC {
         const doAnswer = async () => {
             const answer = await peerConnection.createAnswer();
             await peerConnection.setLocalDescription(answer);
-            this.connection.send(JSON.stringify({ webrtc_event: answer }))
+            connection.send(JSON.stringify({ webrtc_event: answer }))
         }
 
         this.start = () => {
             console.log(`WebRTC: start...`)
 
             peerConnection = new RTCPeerConnection()
-            const remoteStream = new MediaStream()
-            document.querySelector('#video').srcObject = remoteStream
 
-            peerConnection.addEventListener('track', event => {
-                console.log('Got remote track:', event.streams[0]);
-                event.streams[0].getTracks().forEach(track => {
-                    console.log('Add a track to the remoteStream:', track);
-                    remoteStream.addTrack(track);
-                });
-            });
+            const video = document.querySelector('#video')
+            video.srcObject = new MediaStream()
+            video.srcObject.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+            
+            peerConnection.ontrack = event => {
+                video.srcObject = event.streams[0];
+            };
         }
 
         this.stop = () => {

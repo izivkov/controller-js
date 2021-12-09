@@ -8,6 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <script src="index.js" type="module"></script>
+    <script src="buttons.js" type="module"></script>
 </head>
 
 <body>
@@ -17,8 +18,12 @@
         <video id='video' autoplay playsinline></video>
         <ul id="command-list" style="list-style-type: none"></ul>
     </div>
-    <div id="buttons">
+
+    <div id="buttons" style="display:flex; flex-direction: row; justify-content: left; align-items: left">
+        <img id="sound_button" src="" style="margin-left: 1em; margin-top: 1em; margin-bottom: 1em;" width="30" />
+        <img id="mirror_button" src="" style="margin-left: 1em; margin-top: 1em; margin-bottom: 1em;" width="30" />
     </div>
+
     <div>
         <span id="error-message" style="color: red;"></span>
     </div>

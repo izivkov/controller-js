@@ -10,13 +10,13 @@
 export class ErrorDisplay {
 
     constructor () {
-        
-        this.set = (text) => {
-            document.getElementById ('error-message').textContent = text
-        }
-
-        this.reset = () => this.set ('')
-
-        this.reset()
+        reset()
     }
+
+    static set = (text) => {
+        const error = document.getElementById ('error-message')
+        error.textContent = text
+    }
+
+    static reset = () => this.set ('')
 }

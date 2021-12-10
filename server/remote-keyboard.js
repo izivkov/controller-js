@@ -10,8 +10,6 @@
 class RemoteKeyboard {
   constructor (commandHandler) {
     this.commandHandler = commandHandler
-    this.getKeyboardCommands = this.getKeyboardCommands.bind(this)
-    this.start = this.start.bind(this)
 
     this.pressedKeys = new Set()
   }

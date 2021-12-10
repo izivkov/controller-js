@@ -8,28 +8,26 @@
  */
 
 class Commands {
-  constructor (botConnection, browserConnection) {
+  constructor(botConnection, browserConnection) {
     this.botConnection = botConnection
     this.browserConnection = browserConnection
-    this.handleStatus = this.handleStatus.bind(this)
-    this.getCommandHandler = this.getCommandHandler.bind(this)
 
     this.commandHandler = new CommandHandler(botConnection)
-  }
 
-  getCommandHandler () {
-    return this.commandHandler
-  }
+    this.getCommandHandler = () => {
+      return this.commandHandler
+    }
 
-  handleStatus (status /* Json */) {
-    // forward status and WebRTC negotition to browser
-    // console.log(`handleStatus: forwarding ${JSON.stringify(status)} ro browser`)
-    this.browserConnection.send(JSON.stringify(status))
+    this.handleStatus = (_status /* Json */) => {
+      // forward status and WebRTC negotition to browser
+      // console.log(`handleStatus: forwarding ${JSON.stringify(status)} ro browser`)
+      this.browserConnection.send(JSON.stringify(_status))
+    }
   }
 }
 
 class DriveValue {
-  constructor () {
+  constructor() {
     const MAX = 1.0
     const MIN = -1.0
 
@@ -73,7 +71,7 @@ class DriveValue {
 }
 
 class CommandHandler {
-  constructor (botConnection) {
+  constructor(botConnection) {
     this.left = new DriveValue()
     this.right = new DriveValue()
     this.timeoutObj = null

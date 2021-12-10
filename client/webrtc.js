@@ -57,7 +57,7 @@ export class WebRTC {
 
       peerConnection = new RTCPeerConnection()
 
-      const video = document.querySelector('#video')
+      const video = document.getElementById('video')
       video.srcObject = new MediaStream()
       video.srcObject.getTracks().forEach(track => peerConnection.addTrack(track))
 

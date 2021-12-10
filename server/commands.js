@@ -8,7 +8,7 @@
  */
 
 class Commands {
-  constructor(botConnection, browserConnection) {
+  constructor (botConnection, browserConnection) {
     this.botConnection = botConnection
     this.browserConnection = browserConnection
 
@@ -27,7 +27,7 @@ class Commands {
 }
 
 class DriveValue {
-  constructor() {
+  constructor () {
     const MAX = 1.0
     const MIN = -1.0
 
@@ -71,7 +71,7 @@ class DriveValue {
 }
 
 class CommandHandler {
-  constructor(botConnection) {
+  constructor (botConnection) {
     this.left = new DriveValue()
     this.right = new DriveValue()
     this.timeoutObj = null

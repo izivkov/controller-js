@@ -16,7 +16,7 @@ IP address of this application, and connects automatically. The corresponding cl
 is "NetworkServiceConnection".
 
 Note: we are using the "dnssd2" package instead of the more common "bounjour" or "zerocofig", becase the latter
-cannot be resolved in the Android app.
+is not compatible with the Robot's Android app.
 */
 
 class Dnssd {

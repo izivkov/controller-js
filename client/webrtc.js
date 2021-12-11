@@ -8,7 +8,7 @@
  */
 
 export class WebRTC {
-  constructor (connection) {
+  constructor(connection) {
     const { RTCPeerConnection } = window
 
     let peerConnection = null
@@ -58,16 +58,22 @@ export class WebRTC {
       peerConnection = new RTCPeerConnection()
 
       const video = document.getElementById('video')
+
       video.srcObject = new MediaStream()
       video.srcObject.getTracks().forEach(track => peerConnection.addTrack(track))
 
       peerConnection.ontrack = event => {
         video.srcObject = event.streams[0]
       }
+
+      video.play()
     }
 
     this.stop = () => {
       console.log('WebRTC: stop...')
+
+      document.getElementById('video').stop()
+
       peerConnection.close()
       peerConnection = null
     }

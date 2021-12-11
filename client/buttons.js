@@ -22,8 +22,8 @@ export class Buttons {
       connection.send(JSON.stringify({ command: 'TOGGLE_SOUND' }))
     }
 
-    const soundButton = document.getElementById('sound_button')
-    soundButton.onclick = toggleSound
+    // turn sound ON. Sound is controlled by the "controlls" in the video element
+    toggleSound()
   }
 
   static toggleMirror = mirrored => {
@@ -34,9 +34,5 @@ export class Buttons {
       : ''
 
     document.getElementById('mirror_button').src = mirrored ? 'icons/flip_black_24dp-mirrored.svg' : 'icons/flip_black_24dp.svg'
-  }
-
-  static toggleSound = soundOn => {
-    document.getElementById('sound_button').src = soundOn ? 'icons/volume_off_black_24dp.svg' : 'icons/volume_up_black_24dp.svg'
   }
 }

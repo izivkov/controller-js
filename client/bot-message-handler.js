@@ -42,10 +42,6 @@ export class BotMessageHandler {
           Buttons.toggleMirror(msg.TOGGLE_MIRROR === 'true')
           break
 
-        case 'TOGGLE_SOUND':
-          Buttons.toggleSound(msg.TOGGLE_SOUND === 'true')
-          break
-
         case 'WEB_RTC_EVENT':
           webRtc.handle(msg.WEB_RTC_EVENT, connection)
           break

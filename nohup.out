@@ -1,0 +1,27 @@
+
+> controller-js@1.0.0 prestart
+> cd server && npm install
+
+
+up to date, audited 381 packages in 2s
+
+61 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> controller-js@1.0.0 start
+> run-p dev:server dev:start-server
+
+events.js:291
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at internal/fs/streams.js:191:14
+    at FSReqCallback.wrapper [as oncomplete] (fs.js:520:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
